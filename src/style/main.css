@@ -1,0 +1,72 @@
+.container{
+    max-width: 60rem;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 5rem;
+}
+.bioContainer, .containerGeneralInfo, .containerLanguage{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.bio{
+    text-align: left;
+    padding-right: 2.5rem;
+}
+.viewerName{
+    padding-left: 2.5rem;
+}
+.containerGeneralInfo{
+    margin-top: 7rem;
+}
+.commitsReposLinesCodeBox, .refresh, .followInfo, .languageItem{
+    background-color: rgb(216, 219, 221);
+    color: rgb(77, 79, 80);
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    text-align: left;
+    line-height: 0.8;
+}
+.refresh{
+    background-color: #00e7aa;
+}
+.followInfo{
+    background-color: #8fe5ce;
+}
+.overviewContainer{
+    margin-top: 2.5rem;
+}
+.languageItem{
+    text-align: center;
+}
+.languages{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    text-align: left;
+    max-width: 35rem;
+}
+.langItem{
+    background-color: rgb(240, 241, 243);
+    color: rgb(77, 79, 80);
+    border: 1;
+    border-color: rgb(208, 210, 212);
+    border-radius: 2%;
+}
+.langName{
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.commitsPerLang{
+    background-color: #c1fcec;
+    border:1;
+    border-color: #8fe5ce;
+    padding-left: 1rem;
+}
+.locPerLang, .langName{
+    padding-left: 1rem;
+}
+.text{
+    font-size: 1.3rem;
+    font-weight: 200;
+}
