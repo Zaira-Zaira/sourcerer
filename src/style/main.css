@@ -1,31 +1,62 @@
 .container{
-    max-width: 60rem;
+    max-width: 70rem;
     margin: 0 auto;
     width: 100%;
-    margin-top: 5rem;
 }
-.bioContainer, .containerGeneralInfo, .containerLanguage{
+.popInfo{
+    text-align: left;
+    background-color: #40f7c6;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+}
+.popInfo > p{
+    font-size: 1rem;
+    color: rgb(94, 93, 93);
+    padding-left: 15%;
+}
+.shareProfile{
+    text-align: left;
+    padding-left: 5%;
+}
+.shareList{
+    display: flex;
+}
+.shareList > li {
+    padding-left: 1.5rem;
+    list-style: none;
+    text-decoration: underline;
+    color: rgb(94, 93, 93);
+}
+.bioContainer{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 1.5rem;
 }
-.bio{
-    text-align: left;
-    padding-right: 2.5rem;
-}
-.viewerName{
-    padding-left: 2.5rem;
+.bioAndLocation, .overviewheader{
+   padding-top: 1.5rem;
 }
 .containerGeneralInfo{
-    margin-top: 7rem;
+   display: grid;
+   grid-template-columns: repeat(7, 1fr);
+   grid-gap: 1rem;
 }
+.bio, .overviewheader{
+    text-align: left;
+    line-height: 0.5;
+}
+.viewerName{
+    padding-left: 2rem;
+    font-size: 2.5rem;
+    color: rgb(71, 70, 70);
+}
+/* .containerGeneralInfo{
+    margin-top: 3rem;
+} */
 .commitsReposLinesCodeBox, .refresh, .followInfo, .languageItem{
     background-color: rgb(216, 219, 221);
     color: rgb(77, 79, 80);
-    padding-left: 1.7rem;
-    padding-right: 1.7rem;
-    text-align: left;
-    line-height: 0.8;
+    text-align: center;
 }
 .refresh{
     background-color: #00e7aa;
@@ -34,17 +65,22 @@
     background-color: #8fe5ce;
 }
 .overviewContainer{
-    margin-top: 2.5rem;
+    margin-top: 5rem;
+}
+.containerLanguage{
+   display: flex;
+   margin-top: 1.5rem;
+   justify-content: space-around;
 }
 .languageItem{
     text-align: center;
+    padding: 0 1.7rem;
 }
 .languages{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px;
+    grid-gap: 1rem;
     text-align: left;
-    max-width: 35rem;
 }
 .langItem{
     background-color: rgb(240, 241, 243);
@@ -52,6 +88,7 @@
     border: 1;
     border-color: rgb(208, 210, 212);
     border-radius: 2%;
+    width: 17rem;
 }
 .langName{
     font-size: 1.5rem;
@@ -69,4 +106,60 @@
 .text{
     font-size: 1.3rem;
     font-weight: 200;
+}
+.containerLanguages{
+    margin: 0 auto;
+}
+.langTitle{
+    text-align: left;
+    font-size: 2.5rem;
+    color: rgb(71, 70, 70);
+}
+.avatarPhoto{
+    border-radius: 50%;
+    width: 6rem;
+    height: 6rem;
+}
+/* .descFollowers{
+    display: flex;
+} */
+.pieContainer{
+    width: 30rem;
+    background-color: rgb(240, 241, 243);
+}
+.pieLangCont{
+    display: flex;
+    justify-content: space-between;
+}
+.pie{
+    margin: 6rem auto;
+}
+.repoHeader{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+    margin-bottom: 2.0rem;
+}
+.repoInfo{
+    line-height: 0.5;
+    padding-top: 2.0rem;
+}
+.repoArrayHeader{
+    display: flex;
+    justify-content: space-around;
+}
+.repoItemContainer{
+    display: flex;
+    justify-content: space-around;
+}
+.languagesPerRepo{
+    display: flex;
+    justify-content: space-between;
+}
+.infoRepLine{
+    text-align: justify;
+    padding-left: 4rem;
+}
+table{
+    width: 100%;
 }

@@ -7,9 +7,7 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  useQuery,
   createHttpLink,
-  gql
 } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 
@@ -20,7 +18,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = "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";
+  const token = "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";
   // return the headers to the context so httpLink can read them
   return {
     headers: {

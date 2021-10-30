@@ -1,9 +1,9 @@
-import { selectionSetMatchesResult } from "@apollo/client/cache/inmemory/helpers";
-import React, { useState, useEffect } from "react";
 import {useQuery, gql } from "@apollo/client";
 import '../style/main.css';
 import Overview from './Overview';
 import Languages from './Languages';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Repositories from './Repositories';
 
 const DATA = gql`
   query user{
@@ -11,6 +11,7 @@ const DATA = gql`
       name, 
       bio, 
       location,
+      avatarUrl,
       company, 
       following{
         totalCount
@@ -77,17 +78,34 @@ function DisplayNavBar()  {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
      return(
+       <section>
+          <div className="popInfo">
+            <p>Did you know ? You can add statistics from your private repos to your profile</p>
+           </div>
          <section className="container">
+           <div className="shareProfile">
+             <p>Share your profile on :</p>
+               <ul className="shareList">
+                 <li>LinkedIn</li>
+                 <li>Twitter</li>
+                 <li>Facebook</li>
+                 <li>get HTML</li>
+               </ul>
+           </div>
              <div className="bioContainer">
              <h1 className="viewerName">{data.viewer.name}</h1>
-          <div className="bio">
+             <div className="bio">
+          <div className="bioAndLocation">     
           <p>{data.viewer.bio} at {data.viewer.company}</p>
           <p>{data.viewer.location}</p>
           </div>
+        </div>
           </div>
 
           <section className="containerGeneralInfo">
-            <img src={data.viewer.avatarUrl} alt="avatar"/>
+            <div className="avatarContainer">
+            <img src={data.viewer.avatarUrl} alt="avatar" className="avatarPhoto"/>
+           </div>
             <div className="commitsReposLinesCodeBox">
                 <p>Commits</p>
                 <p>4</p>
@@ -102,7 +120,12 @@ function DisplayNavBar()  {
             </div>
             <div className="followInfo">
                 <p>Followers</p>
+                <div className="descFollowers">
                 <p>{data.viewer.followers.totalCount}</p>
+                <div>
+                <FontAwesomeIcon icon="share-alt" color="#222"/>
+                </div>
+                </div>
             </div>
             <div className="followInfo">
                 <p>Following</p>
@@ -114,6 +137,8 @@ function DisplayNavBar()  {
         </section>
         <Overview/>
         <Languages/>
+        <Repositories/>
+         </section>
          </section>
      )
 }

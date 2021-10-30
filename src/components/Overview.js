@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {useQuery, gql } from "@apollo/client";
 import '../style/main.css';
+import { Bar } from 'react-chartjs-2';
+
 
 const DATA = gql`
   query user{
     viewer{
       name, 
+      updatedAt
       bio, 
       location,
       company, 
@@ -16,7 +19,7 @@ const DATA = gql`
         totalCount
       },
       updatedAt,
-      repositories(first: 2){
+      repositories(first: 13){
         totalCount, 
         edges{
           node{
@@ -31,7 +34,7 @@ const DATA = gql`
               totalCount
             }
             updatedAt,
-            languages(first: 10){
+            languages(first: 13){
               edges{
                 node{
                   name, 
@@ -69,29 +72,75 @@ const DATA = gql`
     }
 `;
 
-const Overview  = () => {
+
+
+function Overview(){
+
     const { loading, error, data } = useQuery(DATA);
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
+
+      let languages = data.viewer.repositories.edges
+      .map(({ node }) => node.languages.edges)
+      .flat()
+      .map(({ node }) => node.name);
+
+      languages =  languages.filter((item, index) => languages.indexOf(item) === index);
+
+      let languagesColor = data.viewer.repositories.edges
+      .map(({ node }) => node.languages.edges)
+      .flat()
+      .map(({ node }) => node.color);
+
+      languagesColor =  languagesColor.filter((item, index) => languagesColor.indexOf(item) === index);
+
+
+
+
+      
    return(
        <section className="overviewContainer">
            <div className="bioContainer">
            <h1 className="viewerName">Overview</h1>
-           <div className="bio">
+           <div className="overviewheader">
                <p>{data.viewer.repositories.totalCount} repos</p>
-               <p>Last updated : 2019/ 04 /16</p>
+               <p>Last updated: {data.viewer.updatedAt}</p>
            </div>
            </div>
+           <div>
+             <Bar
+            data={{
+            labels: languages.map(lang => lang),
+            datasets: [
+              {
+                label: '# of Votes',
+                data: data.viewer.repositories.edges.map(edge => edge.node.defaultBranchRef.target.history.totalCount),
+                backgroundColor: languagesColor.map(color => color),
+                borderWidth: 1,
+              },
+            ],
+          }}
+          options={{
+            title:{
+              display:true,
+              text:'Average Rainfall per month',
+              fontSize:20
+            },
+            legend:{
+              display:true,
+              position:'right'
+            }
+          }}
+        />
+             </div>
            <section className="containerLanguage">
-            {data.viewer.repositories.edges.map((edge) => (
-                edge.node.languages.edges.map((lang) => (
+            {languages.map((lang) => (
                     <div className="languageItem">
                         <p>
-                            {lang.node.name}
+                            {lang}
                         </p>
                     </div>
-                ))
-            ))}
+                ))}
            </section>
        </section>
    )
