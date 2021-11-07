@@ -1,158 +1,159 @@
 import React from "react";
-import {useQuery, gql } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 import '../style/main.css';
-import { Doughnut, Pie } from 'react-chartjs-2';
-import { useEffect, useState } from "react";
+import { Pie } from 'react-chartjs-2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import QueryData from '../Data/queryData';
 
 
-const DATA = gql`
-  query user{
-    viewer{
-      name, 
-      bio, 
-      location,
-      company, 
-      following{
-        totalCount
-      },
-      followers{
-        totalCount
-      },
-      updatedAt,
-      repositories(first: 13){
-        totalCount, 
-        edges{
-          node{
-            resourcePath,
-            description,
-            updatedAt,
-            name,
-            owner{
-              login
-            },
-            collaborators{
-              totalCount
-            }
-            updatedAt,
-            languages(first: 6){
-              edges{
-                node{
-                  name, 
-                  color
-                }
-              }
-            },
-            defaultBranchRef{
-              target{
-                ... on Commit{
-                  signature{
-                    isValid
-                  }
-                  tree{
-                    entries{
-                      extension,
-                      name,
-                    }
-                  },
-                  history{
-                    totalCount,
-                  },
-                  additions,
-                  deletions, 
-                  history{
-                    totalCount
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+
+function GetCommitsNbPerLanguage({ data, lang }) {
+  let count = 0;
+  let ExtensionsArray = data.viewer.repositories.edges
+    .map(({ node }) => node.defaultBranchRef.target.tree.entries)
+    .flat()
+    .map(({ extension }) => extension);
+  let ExtensionsArrayOnTree = data.viewer.repositories.edges
+    .map(({ node }) => node.defaultBranchRef.target.tree.entries)
+    .flat()
+    .map(({ object }) => object);
+  
+  for (let i = 0; i < ExtensionsArray.length; i++) {
+    if (ExtensionsArray[i].includes(lang.toLowerCase())) {
+      count += 1
     }
-    }
-`;
+  }
+
+  ExtensionsArrayOnTree.map((item) => (
+    item != null ?
+      item.entries != null ?
+        item.entries.map((entrie) => (
+          entrie.extension.includes(lang.toLowerCase()) ?
+            count += 1
+            :
+            count += 0
+        )) :
+        null
+      :
+      null
+  ));
+  return count;
+}
+
+
+
+function GetLinesOfCodesPerCommit({ data, lang }) {
+  let count = 0;
+
+  let ExtensionsArray = data.viewer.repositories.edges
+    .map(({ node }) => node.defaultBranchRef.target.tree.entries)
+    .flat()
+    .map(({ object }) => object);
+
+  ExtensionsArray.map((item) => (
+    item != null ?
+      item.text != null ?
+        item.text.includes(lang.toLowerCase()) ?
+          item.text.includes("\n") ?
+            count += 1
+            :
+            count += 0
+          :
+          null
+        :
+        null
+      :
+      null
+  ));
+
+  return <p>{count}</p>
+}
 
 
 
 const Languages = () => {
-  const { loading, error, data } = useQuery(DATA);
 
-  
+  const { loading, error, data } = useQuery(QueryData());
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-    let languages = data.viewer.repositories.edges
+
+  let languages = data.viewer.repositories.edges
     .map(({ node }) => node.languages.edges)
     .flat()
-    .map(({ node }) => node.name);
-
-   languages =  languages.filter((item, index) => languages.indexOf(item) === index);
-
-
-   let languagesColor = data.viewer.repositories.edges
-   .map(({ node }) => node.languages.edges)
-   .flat()
-   .map(({ node }) => node.color);
-
-   languagesColor =  languagesColor.filter((item, index) => languagesColor.indexOf(item) === index);
+    .map(({ node }) => node.name + node.color);
+  languages = languages.filter((item, index) => languages.indexOf(item) === index);
 
 
 
-    return(
-        <section className="containerLanguages">
-            <h1 className="langTitle">Languages</h1>
-           <section className="pieLangCont">
-            <section className="languages">
-            {languages.map((lang) => (
-                    <div className="langItem">
-                        <div>
-                        <p className="langName">
-                            {lang}
-                        </p>
-                        </div>
-                        <div className="commitsPerLang">
-                            <p className="text">Commits :</p>
-                            <p>2</p>
-                        </div>
-                        <div className="locPerLang">
-                            <p className="text">LOC</p>
-                            <p>318</p>
-                        </div>
-                    </div>
-                ))
-            }
-           </section>
-           <div className="pieContainer">
-             <div className="pie">
-           <Pie
-           data = {{
-            labels: languages.map(lang => lang),
-            datasets: [
-              {
-                label: '# of Votes',
-                data: data.viewer.repositories.edges.map(edge => edge.node.defaultBranchRef.target.history.totalCount),
-                backgroundColor: languagesColor.map(color => color),
-                borderWidth: 1,
-              },
-            ],
-          }}
-          options={{
-            title:{
-              display:true,
-              text:'Languages per repo',
-              fontSize:20
-            },
-            legend:{
-              display:true,
-              position:'right'
-            }
-          }}
-        /> 
+  return (
+    <section className="containerLanguages">
+      <div className="languagesHeader">
+        <h1 className="viewerName">
+          Languages
+        </h1>
+        <div className="repoInfo">
+          <p className="text">
+            {data.viewer.repositories.totalCount} repos
+          </p>
+          <p className="text">
+            Last updated: {data.viewer.updatedAt.replace(/[A-Z]/g, " ")}
+          </p>
         </div>
+      </div>
+      <section className="pieLangCont">
+        <section className="languages">
+          {languages.map((lang) => (
+            <div className="langItem">
+              <div className="langTagCont">
+                <p className="langName">
+                  {lang.replace(/#[\s\S]*$/, "")}
+                </p>
+                <div className="tagIconLang">
+                  <FontAwesomeIcon style={{ color: lang.replace(/^((.*?))#/, "#") }} icon={faCircle} className="repoTagIcon" />
+                </div>
+              </div>
+              <div className="commitsPerLang">
+                <p className="text">
+                  Commits :
+                </p>
+                <p>
+                  <GetCommitsNbPerLanguage data={data} lang={lang.replace(/#[\s\S]*$/, "")} />
+                </p>
+              </div>
+              <div className="locPerLang">
+                <p className="text">
+                  LOC
+                </p>
+                <p>
+                  <GetLinesOfCodesPerCommit data={data} lang={lang.replace(/#[\s\S]*$/, "")} />
+                </p>
+              </div>
+            </div>
+          ))
+          }
+        </section>
+        <div className="pieContainer">
+          <div className="pie">
+            <Pie
+              data={{
+                labels: languages.map(lang => lang.replace(/#[\s\S]*$/, "")),
+                datasets: [
+                  {
+                    label: '',
+                    data: data.viewer.repositories.edges.map(edge => edge.node.defaultBranchRef.target.history.totalCount),
+                    backgroundColor: languages.map(lang => lang.replace(/^((.*?))#/, "#")),
+                    borderWidth: 1,
+                  },
+                ],
+              }}
+            />
+          </div>
         </div>
-        </section>
-        </section>
-    )
+      </section>
+    </section>
+  )
 }
 
 export default Languages;
