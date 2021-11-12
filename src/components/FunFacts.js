@@ -158,7 +158,7 @@ function FunFacts({data}) {
                     {
                       label: '',
                       data: data.viewer.repositories.edges.map(edge => edge.node.defaultBranchRef.target.history.totalCount),
-                      // backgroundColor: languagesColor.map(color => color),
+                      backgroundColor: ['#40f7c6'],
                       borderWidth: 1,
                     },
                   ],
@@ -189,7 +189,7 @@ function FunFacts({data}) {
                     {
                       label: '',
                       data: data.viewer.repositories.edges.map(edge => edge.node.defaultBranchRef.target.history.totalCount),
-                      // backgroundColor: languagesColor.map(color => color),
+                      backgroundColor: ['#40f7c6'],
                       borderWidth: 1,
                     },
                   ],
