@@ -15,7 +15,7 @@ function GetWeekDayOfCommits({ data }) {
     .flat()
     .map(({ weekday }) => weekday)
   }
-  return <p>weekDay</p>;
+  return <p>I didn't do it</p>;
 }
 
 
@@ -53,7 +53,7 @@ function FunFacts({data}) {
           </div>
           <div className="titleCont">
             <h3 className="title">
-              Night Time
+              No time
             </h3>
             <div className="usersProd">
               <p className="textUsersProd">

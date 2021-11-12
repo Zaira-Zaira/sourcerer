@@ -320,13 +320,13 @@ th:nth-child(2){
 }
 .productiveTimeContainer{
     width: 40%;
-    background-color: rgb(71, 255, 230);
+    background-color: rgb(131, 255, 238);
     padding: 1.5rem;
 }
 .mostProductiveDay{
     width: 40%;
     padding: 1.5rem;
-    background-color: rgb(124, 255, 189);
+    background-color: rgb(168, 255, 212);
 }
 .factsItemCont{
      display: flex;
