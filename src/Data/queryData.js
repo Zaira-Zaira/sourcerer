@@ -13,6 +13,7 @@ const QueryData =  function(){
            viewer{
              name, 
              updatedAt
+             avatarUrl
              bio, 
              location,
              company, 
@@ -34,7 +35,7 @@ const QueryData =  function(){
                 }
               }
              }
-             repositories(first: 13){
+             repositories(first: 2){
                nodes{
                  id
                  name
@@ -47,6 +48,10 @@ const QueryData =  function(){
                totalCount, 
                edges{
                  node{
+                  primaryLanguage{
+                    name
+                    color
+                  }
                    owner{
                      avatarUrl
                    }
@@ -62,7 +67,7 @@ const QueryData =  function(){
                      totalCount
                    }
                    updatedAt,
-                   languages(first: 13){
+                   languages(first: 20){
                      edges{
                        size
                        node{

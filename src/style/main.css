@@ -119,6 +119,7 @@
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1rem;
     text-align: left;
+    margin-bottom: 1.5rem;
 }
 .langItem{
     background-color: rgb(240, 241, 243);
@@ -186,6 +187,7 @@
     width: 30rem;
     background-color: rgb(240, 241, 243);
     border-radius: 1rem;
+    margin-bottom: 1.5rem;
 }
 .pieLangCont{
   display: flex;
@@ -202,7 +204,7 @@
     margin-bottom: 2.0rem;
 }
 .repoInfo, .overviewheader{
-    padding-top: 2.0rem;
+    padding-top: 3rem;
 }
 .repoArrayHeader{
     display: flex;
@@ -237,6 +239,9 @@ table tr{
 table tr:hover{
     background-color: #b1ffea;
 }
+table tr:first-child:hover{
+    background-color: rgb(240, 241, 243);
+}
 tbody:before {
     line-height:2.5rem;
     content:"-";
@@ -262,8 +267,8 @@ th:nth-child(2){
     border-radius: 50%;
 }
 .ownerAvatar{
-    width: 1rem;
-    height: 1rem;
+    width: 1.7rem;
+    height: 1.7rem;
     border-radius: 50%;
     align-self: center;
 }
@@ -292,6 +297,9 @@ th:nth-child(2){
 .gitCheckIcon, .tagIcon{
     align-self: center;
     font-size: 1rem;
+}
+.gitCheckIcon{
+    padding-left: 0.3rem;
 }
 .tagIcon{
     padding-left: 1rem;

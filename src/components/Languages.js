@@ -1,10 +1,9 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
 import '../style/main.css';
 import { Pie } from 'react-chartjs-2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import QueryData from '../Data/queryData';
+
 
 
 
@@ -20,7 +19,7 @@ function GetCommitsNbPerLanguage({ data, lang }) {
     .map(({ object }) => object);
   
   for (let i = 0; i < ExtensionsArray.length; i++) {
-    if (ExtensionsArray[i].includes(lang.toLowerCase())) {
+    if (ExtensionsArray[i].includes(lang.toLowerCase()) || ExtensionsArray[i].includes("js")) {
       count += 1
     }
   }
@@ -29,7 +28,10 @@ function GetCommitsNbPerLanguage({ data, lang }) {
     item != null ?
       item.entries != null ?
         item.entries.map((entrie) => (
-          entrie.extension.includes(lang.toLowerCase()) ?
+          entrie.extension.includes(lang.toLowerCase())  ?
+            count += 1
+            :
+            entrie.extension.includes("js") ? 
             count += 1
             :
             count += 0
@@ -43,40 +45,28 @@ function GetCommitsNbPerLanguage({ data, lang }) {
 
 
 
+
+//fonction what give size in bytes per language
+
 function GetLinesOfCodesPerCommit({ data, lang }) {
   let count = 0;
+    let ExtensionsArray = data.viewer.repositories.edges
+    .map(({ node }) => node.languages.edges)
 
-  let ExtensionsArray = data.viewer.repositories.edges
-    .map(({ node }) => node.defaultBranchRef.target.tree.entries)
-    .flat()
-    .map(({ object }) => object);
-
-  ExtensionsArray.map((item) => (
-    item != null ?
-      item.text != null ?
-        item.text.includes(lang.toLowerCase()) ?
-          item.text.includes("\n") ?
-            count += 1
-            :
-            count += 0
+    ExtensionsArray.map((item) => (
+         item.map((language) => (
+          language.node.name == lang ? 
+           count = count + language.size
           :
-          null
-        :
-        null
-      :
-      null
-  ));
+          count += 0
+         ))
+    ));
 
-  return <p>{count}</p>
+         return <p>{count}</p>
 }
 
 
-
-const Languages = () => {
-
-  const { loading, error, data } = useQuery(QueryData());
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+function Languages({data}){
 
 
   let languages = data.viewer.repositories.edges

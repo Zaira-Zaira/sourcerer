@@ -2,26 +2,24 @@ import { useQuery, gql } from "@apollo/client";
 import '../style/main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Bar, Doughnut } from 'react-chartjs-2';
-import { faCoffee, faShareAlt, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-import QueryData from '../Data/queryData';
+import { faShareAlt, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+
+
 
 
 function GetWeekDayOfCommits({ data }) {
-  let weekDays = data.viewer.contributionsCollection.contributionCalendar.weeks
+
+  if(data.viewer.contributionsCollection !== undefined ) {
+    let weekDays = data.viewer.contributionsCollection.contributionCalendar.weeks
     .map(({ contributionDays }) => contributionDays)
     .flat()
     .map(({ weekday }) => weekday)
+  }
   return <p>weekDay</p>;
 }
 
 
-function FunFacts() {
-
-  const { loading, error, data } = useQuery(QueryData());
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-
+function FunFacts({data}) {
   let languages = data.viewer.repositories.edges
     .map(({ node }) => node.languages.edges)
     .flat()

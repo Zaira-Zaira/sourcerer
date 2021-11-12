@@ -1,31 +1,30 @@
-import { useQuery, gql } from "@apollo/client";
 import '../style/main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faCheckCircle, faBomb, faCircle } from '@fortawesome/free-solid-svg-icons'
-import QueryData from '../Data/queryData';
+import {  faCheckCircle, faBomb, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { Line } from 'react-chartjs-2';
 
 
-function GetRepository(data)
+function GetRepositoryLanguage({data})
 {
-  let languages = data.viewer.repositories.edges
-  .map(({ node }) => node.languages.edges)
-  .flat()
-  .map(({size, node}) => node.name)
-
-
-  // languages.map((lang) => (
-  //      console.log(lang)
-  // ));
-
-  console.log(languages);
-
+  let language;
+  function getArrayMax(array){
+    return Math.max.apply(null, array);
+ }
+ let sizeLang = []
+  data.map((lang) => (
+       sizeLang.push(lang.size)
+  ));
+  data.map((lang) => (
+     lang.size == getArrayMax(sizeLang) ? 
+     language = lang.node.name
+     :
+     null
+  ))
+  return <p>{language}</p>
 }
 
-function Repositories() {
 
-  const { loading, error, data } = useQuery(QueryData());
-  if (loading) return null;
-  if (error) return <p>Error :(</p>;
+function Repositories({data}) {
 
   let languages = data.viewer.repositories.edges
     .map(({ node }) => node.languages.edges)
@@ -34,7 +33,7 @@ function Repositories() {
 
   languages = languages.filter((item, index) => languages.indexOf(item) === index);
 
-  GetRepository(data);
+
   return (
     <section>
       <div className="repoHeader">
@@ -68,7 +67,7 @@ function Repositories() {
                   <td>
                     <div className="infoRepLine">
                       <div className="repoNameRowContainer">
-                        <img src={repo.node.owner.avatarUrl} alt="owner avatar" className="ownerAvatar" />
+                        <img src="../github.png" alt="owner avatar" className="ownerAvatar" />
                         <p className="repoNameTxt">
                           {repo.node.name}
                         </p>
@@ -81,7 +80,7 @@ function Repositories() {
                         </p>
                       </div>
                       <div className="repoDescRowCont">
-                        <img src={repo.node.owner.avatarUrl} alt="owner avatar" className="ownerAvatar" />
+                        <img src="../github.png" alt="owner avatar" className="ownerAvatar" />
                         <p className="repoNameTxt">
                           {repo.node.resourcePath}
                         </p>
@@ -134,11 +133,43 @@ function Repositories() {
                   </td>
                   <td>
                     <div className="repoDescRowCont">
-                      <p className="text">C</p>
-                      <FontAwesomeIcon icon={faCircle} className="tagIcon" />
+                      <p className="text">
+                        {
+                          repo.node.primaryLanguage != null ?
+                          repo.node.primaryLanguage.name
+                          :
+                          <p>Assembley</p>
+                        }
+                      </p>
+                      <FontAwesomeIcon icon={faCircle} className="tagIcon" color={repo.node.primaryLanguage != null ? 
+                      repo.node.primaryLanguage.color : null} />
                     </div>
                   </td>
-                  <td>Time</td>
+                  <td>
+                    <div>
+                    <Line 
+                              data={{
+                                labels: [],
+                                datasets: [
+                                  {
+                                    label: '',
+                                    data: [],
+                                    backgroundColor: ['#40f7c6'],
+                                    borderWidth: 1,
+                                  },
+                                ],
+                              }}
+                              options={{
+                                title: {
+                                  display: false,
+                                },
+                                legend: {
+                                  display: false,
+                                }
+                              }}
+                    />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

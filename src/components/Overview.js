@@ -1,18 +1,11 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
 import '../style/main.css';
 import { Bar } from 'react-chartjs-2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import QueryData from '../Data/queryData';
 
 
 
-function Overview() {
 
-  const { loading, error, data } = useQuery(QueryData());
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+function Overview({data}) {
 
   let languages = data.viewer.repositories.edges
     .map(({ node }) => node.languages.edges)
